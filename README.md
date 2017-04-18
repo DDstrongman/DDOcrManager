@@ -1,4 +1,4 @@
-# HttpSupportSpec
+# DDOcrManager
 
 [![CI Status](http://img.shields.io/travis/DDStrongman/HttpSupportSpec.svg?style=flat)](https://travis-ci.org/DDStrongman/HttpSupportSpec)
 [![Version](https://img.shields.io/cocoapods/v/HttpSupportSpec.svg?style=flat)](http://cocoapods.org/pods/HttpSupportSpec)

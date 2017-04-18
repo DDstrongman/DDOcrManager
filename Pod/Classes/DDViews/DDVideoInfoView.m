@@ -10,11 +10,12 @@
 
 #import "DDIDCardInfo.h"
 #import "DDBankCardInfo.h"
-#import "excards.h"
-#import "exbankcard.h"
 #import "UIImage+DDExtension.h"
 #import "DDRectManager.h"
 #import "DDBankCardSearch.h"
+
+#import "excards.h"
+#import "exbankcard.h"
 
 @interface DDVideoInfoView ()
 
