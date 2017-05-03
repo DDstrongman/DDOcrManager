@@ -6,11 +6,14 @@
 //  Copyright © 2017年 李胜书. All rights reserved.
 //
 
+
 #import <UIKit/UIKit.h>
 
 #import "DDVideoInfoMaster.h"
 #import "DDBankCardInfo.h"
 #import "DDIDCardInfo.h"
+
+typedef void(^OcrResultBlock)(id infoItem,UIImage *image);
 
 @interface DDRecInfoViewController : UIViewController
 
@@ -18,5 +21,7 @@
  识别身份证还是识别银行卡
  */
 @property (nonatomic, assign) VideoType type;
+
+@property (nonatomic, copy) OcrResultBlock ocrResultBlock;
 
 @end

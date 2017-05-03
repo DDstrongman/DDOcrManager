@@ -91,11 +91,7 @@ static bool initFlag = NO;
 
 #pragma mark - CaptureDelegate
 - (void)didEndRecInfo:(id)infoItem Image:(UIImage*)image {
-    if ([infoItem isKindOfClass:[DDIDCardInfo class]]) {
-        
-    }else if ([infoItem isKindOfClass:[DDBankCardInfo class]]) {
-        
-    }
+    self.ocrResultBlock(infoItem, image);
     [self.ocrMaster stopSession];
     [self.navigationController popViewControllerAnimated:YES];
 }
