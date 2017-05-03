@@ -1,5 +1,5 @@
 //
-//  DDVideoInfoView.h
+//  DDVideoInfoMaster.h
 //  DDRecBankCardAndID
 //
 //  Created by 李胜书 on 2017/4/17.
@@ -15,6 +15,8 @@ typedef enum {
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+
+#import "excards.h"
 
 @protocol OcrInfoDelegate<NSObject>
 
@@ -36,7 +38,7 @@ typedef enum {
 
 @end
 
-@interface DDVideoInfoView : UIView
+@interface DDVideoInfoMaster : NSObject
 
 /**
  识别视频流的类型，0：识别身份证，1：识别银行卡。目前只支持此两种

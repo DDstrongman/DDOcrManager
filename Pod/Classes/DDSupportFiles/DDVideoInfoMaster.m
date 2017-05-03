@@ -6,7 +6,7 @@
 //  Copyright © 2017年 李胜书. All rights reserved.
 //
 
-#import "DDVideoInfoView.h"
+#import "DDVideoInfoMaster.h"
 
 #import "DDIDCardInfo.h"
 #import "DDBankCardInfo.h"
@@ -14,10 +14,9 @@
 #import "DDRectManager.h"
 #import "DDBankCardSearch.h"
 
-#import "excards.h"
 #import "exbankcard.h"
 
-@interface DDVideoInfoView ()
+@interface DDVideoInfoMaster ()
 
 {
     BOOL _isInProcessing;
@@ -26,7 +25,7 @@
 
 @end
 
-@implementation DDVideoInfoView
+@implementation DDVideoInfoMaster
 
 - (void)startSession {
     if (![self.captureSession isRunning]) {
@@ -322,7 +321,7 @@
                         lastIdInfo = idInfo;
                         idInfo = nil;
                     }
-                    else{
+                    else {
                         if (![lastIdInfo isEqual:idInfo]){
                             lastIdInfo = idInfo;
                             idInfo = nil;
@@ -388,7 +387,6 @@
                 int charCount = [DDRectManager docode:result len:resultLen];
                 if(charCount > 0) {
                     CGRect subRect = [DDRectManager getCorpCardRect:width height:height guideRect:rect charCount:charCount];
-                    _isHasResult = YES;
                     UIImage *image = [UIImage getImageStream:imageBuffer];
                     __block UIImage *subImg = [UIImage getSubImage:subRect inImage:image];
                     
@@ -400,12 +398,35 @@
                     DDBankCardInfo *bankCardInfo = [[DDBankCardInfo alloc]init];
                     bankCardInfo.number = numberStr;
                     bankCardInfo.bankName = bank;
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-                        if ([self.ocrDelegate respondsToSelector:@selector(didEndRecInfo:Image:)]) {
-                            [self.ocrDelegate didEndRecInfo:bankCardInfo Image:subImg];
+                    
+                    static DDBankCardInfo *lastBankCardInfo = nil;
+                    if (self.verify) {
+                        if (lastBankCardInfo == nil) {
+                            lastBankCardInfo = bankCardInfo;
+                            bankCardInfo = nil;
                         }
-                    });
+                        else {
+                            if (![lastBankCardInfo isEqual:bankCardInfo]){
+                                lastBankCardInfo = bankCardInfo;
+                                bankCardInfo = nil;
+                            }
+                        }
+                    }
+                    if (lastBankCardInfo.isReady) {
+                        NSLog(@"%@", [lastBankCardInfo sumString]);
+                    } else {
+                        bankCardInfo = nil;
+                    }
+                    
+                    if (bankCardInfo != nil) {
+                        _isHasResult = YES;
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+                            if ([self.ocrDelegate respondsToSelector:@selector(didEndRecInfo:Image:)]) {
+                                [self.ocrDelegate didEndRecInfo:bankCardInfo Image:subImg];
+                            }
+                        });
+                    }
                 }
             }
             CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
@@ -414,5 +435,7 @@
         CVBufferRelease(imageBuffer);
     }
 }
+
+
 
 @end
